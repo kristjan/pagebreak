@@ -2,6 +2,9 @@ var _window = $(window);
 var ROWS = 5;
 var COLS = 10;
 
+var BACKGROUND_COLOR = 0;
+var FOREGROUND_COLOR = 255;
+
 Pagebreak = (function() {
   var game, ball, bricks, p;
 
@@ -28,7 +31,7 @@ Pagebreak = (function() {
     p.frameRate(60);
     p.size(screen.width, screen.height);
     p.draw = function() {
-      p.background(0);
+      p.background(BACKGROUND_COLOR);
       ball.draw(p);
       bricks.draw(p);
     };
@@ -54,7 +57,7 @@ var Ball = function() {
   };
 
   this.draw = function(p) {
-    p.fill(255);
+    p.fill(FOREGROUND_COLOR)
     p.ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
     this.update('x');
     this.update('y');
@@ -82,7 +85,7 @@ var Bricks = function(rows, cols) {
   }
 
   this.draw = function(p) {
-    p.fill(255);
+    p.fill(FOREGROUND_COLOR);
     for (var row = 0; row < rows; row++) {
       for (var col = 0; col < cols; col++) {
         if (this.bricks[row][col]) this.drawBrick(p, row, col);
