@@ -178,12 +178,15 @@ var Bricks = function(rows, cols) {
   };
 
   this.getGeometry = function(row, col) {
-    var unit = _window.innerWidth() / ((cols - 1) + 10 * (cols + 2));
+    var units = {
+      width:  _window.innerWidth() / ((cols - 1) + 10 * (cols + 2)),
+      height: (_window.innerHeight() / 2) / ((rows - 1) + 10 * (rows + 2)),
+    };
     return {
-      x     : unit * (10 * (col + 1) + col),
-      y     : unit * (5 * (row + 1) + row),
-      width : unit * 10,
-      height: unit * 5
+      x     : units.width  * (10 * (col + 1) + col),
+      y     : units.height * (5 * (row + 1) + row),
+      width : units.width  * 10,
+      height: units.height * 5
     };
   }
 }
