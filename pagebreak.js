@@ -1,7 +1,9 @@
 var _window = $(window);
+var ROWS = 5;
+var COLS = 10;
 
 Pagebreak = (function() {
-  var game, ball, p;
+  var game, ball, bricks, p;
 
   function init() {
     game = createGame();
@@ -18,6 +20,7 @@ Pagebreak = (function() {
 
   function startGame() {
     ball = new Ball();
+    bricks = new Bricks(ROWS, COLS);
     p = new Processing('game', run);
   }
 
@@ -27,6 +30,7 @@ Pagebreak = (function() {
     p.draw = function() {
       p.background(0);
       ball.draw(p);
+      bricks.draw(p);
     };
   }
 
@@ -65,6 +69,33 @@ var Ball = function() {
       this.velocity[coord] = Math.abs(this.velocity[coord]);
     if (this.pos[coord] + this.radius >= _window[dimension]())
       this.velocity[coord] = -Math.abs(this.velocity[coord]);
+  };
+}
+
+var Bricks = function(rows, cols) {
+  this.bricks = new Array(rows);
+  for (var row = 0; row < rows; row++) {
+    this.bricks[row] = new Array(cols);
+    for (var col = 0; col < cols; col++) {
+      this.bricks[row][col] = true;
+    }
+  }
+
+
+  this.draw = function(p) {
+    p.fill(255);
+    for (var row = 0; row < rows; row++) {
+      for (var col = 0; col < cols; col++) {
+        if (this.bricks[row][col]) this.drawBrick(p, row, col);
+      }
+    }
+  };
+
+  this.drawBrick = function(p, row, col) {
+    var unit = _window.innerWidth() / ((cols - 1) + 10 * (cols + 2));
+    var x = unit * (10 * (col + 1) + col)
+    var y = unit * (5 * (row + 1) + row)
+    p.rect(x, y, 10 * unit, 5 * unit);
   };
 }
 
