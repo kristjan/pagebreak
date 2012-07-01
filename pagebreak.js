@@ -13,6 +13,14 @@ var BALL_RATIO = .03;
 var BACKGROUND_COLOR = 0;
 var FOREGROUND_COLOR = 255;
 
+var FRICTION = {
+  x: .999,
+  y: .995
+};
+var MIN_VELOCITY = .5;
+
+var STRIKE_POWER = .5;
+
 Pagebreak = (function() {
   var game, ball, bricks, p;
 
@@ -64,12 +72,12 @@ var Ball = function() {
   };
 
   this.velocity = {
-    x: 10,
-    y: -10
+    x: 10.0,
+    y: -10.0
   };
 
   this.draw = function(p) {
-    this.radius = BALL_RATIO * _window.smallestDimension();
+    //this.radius = BALL_RATIO * _window.smallestDimension();
     p.fill(FOREGROUND_COLOR)
     p.ellipse(this.pos.x, this.pos.y, this.diameter(), this.diameter());
     this.update('x');
@@ -83,8 +91,15 @@ var Ball = function() {
 
     if (this.pos[coord] <= this.radius)
       this.velocity[coord] = Math.abs(this.velocity[coord]);
-    if (this.pos[coord] + this.radius >= _window[dimension]())
-      this.velocity[coord] = -Math.abs(this.velocity[coord]);
+    if (this.pos[coord] + this.radius >= _window[dimension]()) {
+      var diff =
+        Math.abs(_window[dimension]() - (this.pos[coord] + this.radius));
+      var bounceSpeed = Math.abs(this.velocity[coord]);
+      var strikeSpeed = Math.abs(diff * STRIKE_POWER);
+      this.velocity[coord] = -Math.max(bounceSpeed, strikeSpeed);
+    }
+
+    this.velocity[coord] *= FRICTION[coord];
   };
 
   this.bounce = function(direction) {
