@@ -1,6 +1,14 @@
 var _window = $(window);
+_window.smallestDimension = function() {
+  var width = this.innerWidth();
+  var height = this.innerHeight();
+  return (width < height) ? width : height;
+};
+
 var ROWS = 5;
 var COLS = 10;
+
+var BALL_RATIO = .03;
 
 var BACKGROUND_COLOR = 0;
 var FOREGROUND_COLOR = 255;
@@ -45,11 +53,14 @@ Pagebreak = (function() {
 
 var Ball = function() {
   this.radius   = 25;
-  this.diameter = 2 * this.radius
+
+  this.diameter = function() {
+    return 2 * this.radius;
+  };
 
   this.pos = {
     x: _window.innerWidth() / 2,
-    y: _window.innerHeight() - this.diameter - 20
+    y: _window.innerHeight() - this.diameter() - 20
   };
 
   this.velocity = {
@@ -58,8 +69,9 @@ var Ball = function() {
   };
 
   this.draw = function(p) {
+    this.radius = BALL_RATIO * _window.smallestDimension();
     p.fill(FOREGROUND_COLOR)
-    p.ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
+    p.ellipse(this.pos.x, this.pos.y, this.diameter(), this.diameter());
     this.update('x');
     this.update('y');
   };
