@@ -44,12 +44,12 @@ var Ball = function() {
   this.diameter = 2 * this.radius
 
   this.pos = {
-    x: _window.innerWidth()  - this.diameter - 20,
+    x: _window.innerWidth() / 2,
     y: _window.innerHeight() - this.diameter - 20
   };
 
   this.velocity = {
-    x: -10,
+    x: 10,
     y: -10
   };
 
@@ -80,7 +80,6 @@ var Bricks = function(rows, cols) {
       this.bricks[row][col] = true;
     }
   }
-
 
   this.draw = function(p) {
     p.fill(255);
